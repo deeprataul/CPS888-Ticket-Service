@@ -56,10 +56,37 @@ public class Ticket_Service {
 
             switch (input) {
                 case "login":
-                    System.out.print("Enter your username: ");
-                    input = scanner.nextLine();
-                    
-                    
+                    boolean attemptingLogin = true;
+
+                    while (attemptingLogin) {
+                        System.out.print("Enter your username: ");
+                        input = scanner.nextLine();
+                        System.out.print("Enter your password: ");
+                        String password = scanner.nextLine();
+
+                        if (accountsHash.containsKey(input) && 
+                                accountsList.get(accountsHash.get(input)).getPassword().equals(password)) {
+                            currentAccount = accountsList.get(accountsHash.get(input));
+                            attemptingLogin = false;
+                            System.out.println("Welcome " + currentAccount.getUsername());
+                        } else {
+                            boolean validInput = false;
+                            while (!validInput) {
+                                System.out.print("Invalid user credentials. Would you like to try again (y/n): ");
+                                input = scanner.nextLine().toLowerCase();
+                                switch (input) {
+                                    case "y":
+                                        validInput = true;
+                                        attemptingLogin = true;
+                                        break;
+                                    case "n":
+                                        validInput = true;
+                                        attemptingLogin = false;
+                                        break;
+                                }
+                            }
+                        }
+                    }
                     break;
                 case "logout":
                     break;
@@ -74,6 +101,9 @@ public class Ticket_Service {
                 case "refund":
                     break;
                 case "addcredit":
+                    break;
+                case "help":
+                    System.out.println(helpString + "\n");
                     break;
                 default:
                     System.out.println("\nSorry. You have not entered a valid " + 
