@@ -11,14 +11,13 @@ import java.util.Scanner;
  * @author Sean
  */
 public class Ticket_Service {
-    static String helpString = "Login: Login to a specific user account\n"
-            + "Logout: Logout of the current account\nCreate: Create a new user"
-            + "account (can only be done by an admin)\nDelete: Remove "
-            + "a user account (can only be done by an admin)\nSell: "
-            + "Sell a ticket or tickets to an event\nBuy: Purchase a ticket or "
-            + "tickets to an event\nRefund: Issue a credit to a buyer from a "
-            + "seller's account\nAddcredit: Add credit to an account (can only "
-            + "be done by an admin)\nExit: Closes the application";
+
+    static String helpString = "Login: Login to a specific user account\nLogout: Logout of the "
+            + "current account\nCreate: Create a new user account (can only be done by an admin)\n"
+            + "Delete: Remove a user account (can only be done by an admin)\nSell: Sell a ticket "
+            + "or tickets to an event\nBuy: Purchase a ticket or tickets to an event\nRefund: "
+            + "Issue a credit to a buyer from a seller's account\nAddcredit: Add credit to an "
+            + "account (can only be done by an admin)\nExit: Closes the application";
 
     /**
      * @param args the command line arguments
@@ -29,9 +28,8 @@ public class Ticket_Service {
 
         Account currentAccount = null;
         System.out.println("Ticket Selling System\n"
-                + "These are the valid input commands that you can enter. At "
-                + "any point, enter help to see this list again (commands are "
-                + "not case sensitive).\n\n" + helpString + "\n");
+                + "These are the valid input commands that you can enter. At any point, enter help "
+                + "to see this list again (commands are not case sensitive).\n\n" + helpString + "\n");
 
         try (BufferedReader br = new BufferedReader(new FileReader("Current User Accounts.txt"))) {
             String line = br.readLine();
@@ -71,7 +69,8 @@ public class Ticket_Service {
                             } else {
                                 boolean validInput = false;
                                 while (!validInput) {
-                                    System.out.print("Invalid user credentials. Would you like to try again (y/n): ");
+                                    System.out.print("Invalid user credentials. Would you like to " +
+                                            "try again (y/n): ");
                                     input = scanner.nextLine().toLowerCase();
                                     switch (input) {
                                         case "y":
@@ -86,76 +85,61 @@ public class Ticket_Service {
                                 }
                             }
                         }
-                    }
-                    else{
-                        System.out.println("You are currently logged in as " + 
-                                currentAccount.getUsername() + ". Please " +
-                                "logout in order to login as a different user");
+                    } else {
+                        System.out.println("You are currently logged in as "
+                                + currentAccount.getUsername() + ". Please logout in order to "
+                                + "login as a different user");
                     }
                     break;
                 case "logout":
-                    if (currentAccount != null){
-                        System.out.println(currentAccount.getUsername() + 
-                                "successfully logged out.");
+                    if (currentAccount != null) {
+                        System.out.println(currentAccount.getUsername()
+                                + "successfully logged out.");
                         currentAccount = null;
-                    }
-                    else{
-                        System.out.println("You must be logged in to use the " +
-                                "logout command.");
+                    } else {
+                        System.out.println("You must be logged in to use the logout command.");
                     }
                     break;
                 case "create":
-                    if (currentAccount != null){
+                    if (currentAccount != null) {
                         //Write the create code here
-                    }
-                    else{
-                        System.out.println("You must be logged in to use the " +
-                                "create command.");
+                    } else {
+                        System.out.println("You must be logged in to use the create command.");
                     }
                     break;
                 case "delete":
-                    if (currentAccount != null){
+                    if (currentAccount != null) {
                         //Write the delete code here
-                    }
-                    else{
-                        System.out.println("You must be logged in to use the " +
-                                "delete command.");
+                    } else {
+                        System.out.println("You must be logged in to use the delete command.");
                     }
                     break;
                 case "sell":
-                    if (currentAccount != null){
+                    if (currentAccount != null) {
                         //Write the sell code here
-                    }
-                    else{
-                        System.out.println("You must be logged in to use the " +
-                                "sell command.");
+                    } else {
+                        System.out.println("You must be logged in to use the sell command.");
                     }
                     break;
                 case "buy":
-                    if (currentAccount != null){
+                    if (currentAccount != null) {
                         //Write the buy code here
-                    }
-                    else{
-                        System.out.println("You must be logged in to use the " +
-                                "buy command.");
+                    } else {
+                        System.out.println("You must be logged in to use the buy command.");
                     }
                     break;
                 case "refund":
-                    if (currentAccount != null){
+                    if (currentAccount != null) {
                         //Write the refund code here
-                    }
-                    else{
-                        System.out.println("You must be logged in to use the " +
-                                "refund command.");
+                    } else {
+                        System.out.println("You must be logged in to use the refund command.");
                     }
                     break;
                 case "addcredit":
-                    if (currentAccount != null){
+                    if (currentAccount != null) {
                         //Write the addcredit code here
-                    }
-                    else{
-                        System.out.println("You must be logged in to use the " +
-                                "addcredit command.");
+                    } else {
+                        System.out.println("You must be logged in to use the addcredit command.");
                     }
                     break;
                 case "help":
@@ -164,13 +148,11 @@ public class Ticket_Service {
                 case "exit":
                     System.out.println("Good bye");
                 default:
-                    System.out.println("Sorry. You have not entered a valid "
-                            + "input. Please try again. If you would like to "
-                            + "see the list of commands, enter \"help\" "
-                            + "(without quotations)\n");
+                    System.out.println("Sorry. You have not entered a valid input. Please try "
+                            + "again. If you would like to see the list of commands, enter " +
+                            "\"help\" (without quotations)\n");
                     break;
             }
         }
     }
-
 }
