@@ -94,18 +94,69 @@ public class Ticket_Service {
                     }
                     break;
                 case "logout":
+                    if (currentAccount != null){
+                        System.out.println(currentAccount.getUsername() + 
+                                "successfully logged out.");
+                        currentAccount = null;
+                    }
+                    else{
+                        System.out.println("You must be logged in to use the " +
+                                "logout command.");
+                    }
                     break;
                 case "create":
+                    if (currentAccount != null){
+                        //Write the create code here
+                    }
+                    else{
+                        System.out.println("You must be logged in to use the " +
+                                "create command.");
+                    }
                     break;
                 case "delete":
+                    if (currentAccount != null){
+                        //Write the delete code here
+                    }
+                    else{
+                        System.out.println("You must be logged in to use the " +
+                                "delete command.");
+                    }
                     break;
                 case "sell":
+                    if (currentAccount != null){
+                        //Write the sell code here
+                    }
+                    else{
+                        System.out.println("You must be logged in to use the " +
+                                "sell command.");
+                    }
                     break;
                 case "buy":
+                    if (currentAccount != null){
+                        //Write the buy code here
+                    }
+                    else{
+                        System.out.println("You must be logged in to use the " +
+                                "buy command.");
+                    }
                     break;
                 case "refund":
+                    if (currentAccount != null){
+                        //Write the refund code here
+                    }
+                    else{
+                        System.out.println("You must be logged in to use the " +
+                                "refund command.");
+                    }
                     break;
                 case "addcredit":
+                    if (currentAccount != null){
+                        //Write the addcredit code here
+                    }
+                    else{
+                        System.out.println("You must be logged in to use the " +
+                                "addcredit command.");
+                    }
                     break;
                 case "help":
                     System.out.println(helpString + "\n");
@@ -113,7 +164,7 @@ public class Ticket_Service {
                 case "exit":
                     System.out.println("Good bye");
                 default:
-                    System.out.println("\nSorry. You have not entered a valid "
+                    System.out.println("Sorry. You have not entered a valid "
                             + "input. Please try again. If you would like to "
                             + "see the list of commands, enter \"help\" "
                             + "(without quotations)\n");
