@@ -25,7 +25,11 @@ public class Ticket_Service {
     public static void main(String[] args) {
         ArrayList<Account> accountsList = new ArrayList<>();
         Hashtable<String, Integer> accountsHash = new Hashtable<String, Integer>();
-
+        
+        ArrayList<AvailableTicket> availableTicketsList = new ArrayList<>();
+        BuyManager buyManager = new BuyManager();
+        SellManager sellManager = new SellManager();
+        
         Account currentAccount = null;
         System.out.println("Ticket Selling System\n"
                 + "These are the valid input commands that you can enter. At any point, enter help "
@@ -44,6 +48,18 @@ public class Ticket_Service {
             System.err.println(ex.getMessage());
         }
 
+        try (BufferedReader br = new BufferedReader(new FileReader("Available Tickets File.txt"))) {
+            String line = br.readLine();
+            if (!line.equals("END")) {
+                AvailableTicket ticket = new AvailableTicket(line);
+                availableTicketsList.add(ticket);
+            } else {
+                br.close();
+            }
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
+        }
+        
         Scanner scanner = new Scanner(System.in);
         String input = "Not Exit";
         while (!input.equals("exit")) {
@@ -116,14 +132,14 @@ public class Ticket_Service {
                     break;
                 case "sell":
                     if (currentAccount != null) {
-                        //Write the sell code here
+                        sellManager.Sell();
                     } else {
                         System.out.println("You must be logged in to use the sell command.");
                     }
                     break;
                 case "buy":
                     if (currentAccount != null) {
-                        //Write the buy code here
+                        buyManager.Buy(availableTicketsList);
                     } else {
                         System.out.println("You must be logged in to use the buy command.");
                     }
