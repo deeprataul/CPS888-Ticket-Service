@@ -1,10 +1,17 @@
 package ticket_service;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import ticket_service.Account.UserType;
+import static ticket_service.SellManager.padRight;
 
 /**
  *
@@ -18,37 +25,51 @@ public class BuyManager {
     private ArrayList<AvailableTicket> availableTicketsList;
     private ArrayList<AvailableTicket> selectedTicketsList;
     private AvailableTicket selectedTicket;
+    private Account myAccount;
+    private int numberToPurchase;
+    private double totalCost;
+    private DecimalFormat df;
 
     public BuyManager() {
         selectedTicketsList = new ArrayList<>();
+        df = new DecimalFormat("####0.00");
     }
 
-    public void Buy(ArrayList<AvailableTicket> list) {
+    public void Buy(ArrayList<AvailableTicket> list, Account currentAccount) {
         input = "Not Return";
         gotEventTitle = false;
         gotSellerUsername = false;
         gotNumTickets = false;
         availableTicketsList = list;
         scanner = new Scanner(System.in);
+        myAccount = currentAccount;
+        numberToPurchase = 0;
+        totalCost = 0.00;
         CreateDialogue();
     }
 
     private void CreateDialogue() {
-        Output(true, "Enter return at any time to cancel operation.");
-        while (!input.equals("return")) {
-            if (gotSellerUsername) {
-                if (gotEventTitle) {
-                    if (gotNumTickets) {
-                        Output(true, "Proceed to buy.");
+        if (myAccount.getType() != UserType.SellStandard) {
+            Output(true, "Enter return at any time to cancel operation.");
+            while (!input.equals("return")) {
+                if (gotSellerUsername) {
+                    if (gotEventTitle) {
+                        if (gotNumTickets) {
+                            if (Confirm()) {
+                                input = "return";
+                            }
+                        } else {
+                            gotNumTickets = ParseNumTickets();
+                        }
                     } else {
-                        gotNumTickets = ParseNumTickets();
+                        gotEventTitle = ParseEventTitle();
                     }
                 } else {
-                    gotEventTitle = ParseEventTitle();
+                    gotSellerUsername = ParseSellerUsername();
                 }
-            } else {
-                gotSellerUsername = ParseSellerUsername();
             }
+        } else {
+            Output(true, "Your account does not have access to buying tickets.");
         }
 
         // Clean up and return to main loop.
@@ -86,7 +107,7 @@ public class BuyManager {
             if (t.GetEventName().trim().equals(input)) {
                 selectedTicket = t;
                 Output(true, "Number of tickets available: " + t.GetNumberTickets()
-                        + " | Price: " + t.GetTicketPrice());
+                        + " | Price: " + df.format(t.GetTicketPrice()));
                 return true;
             }
         }
@@ -99,8 +120,16 @@ public class BuyManager {
         Output(false, "Enter the number of tickets you want to purchase: ");
         input = scanner.nextLine().toLowerCase();
         // TODO: Parse Input
-        // TODO: Check if admin or not
+        // TODO: Check if user has enough money;
+
+        if (myAccount.getType() != UserType.Admin) {
+            if (Integer.parseInt(input) > 4) {
+                Output(true, "You are only allowed to buy at most 4 tickets.");
+            }
+        }
+
         if (Integer.parseInt(input) <= selectedTicket.GetNumberTickets()) {
+            numberToPurchase = Integer.parseInt(input);
             return true;
         } else {
             Output(true, "The seller does not have enough tickets, try again.");
@@ -108,11 +137,50 @@ public class BuyManager {
         }
     }
 
+    private boolean Confirm() {
+        totalCost = selectedTicket.GetTicketPrice() * numberToPurchase;
+
+        Output(true, "The total cost is $" + df.format(totalCost) + " at a price of $"
+                + df.format(selectedTicket.GetTicketPrice()) + " per ticket.");
+        Output(false, "Enter 'yes' to purchase or 'no' to return: ");
+        input = scanner.nextLine().toLowerCase();
+        // TODO: Parse Input
+
+        if (input.equals("yes")) {
+            WriteToDailyTransactionsFile(selectedTicket, "04");
+            Output(true, "You have successfully purchased the tickets!");
+        } else if (input.equals("no")) {
+            Output(true, "You have cancelled the transaction.");
+        }
+
+        return true;
+    }
+
     private void Output(boolean newLine, String s) {
         if (newLine) {
-            System.out.println("Buy Manager | " + s);
+            System.out.println("BUY MANAGER | " + s);
         } else {
-            System.out.print("Buy Manager | " + s);
+            System.out.print("BUY MANAGER | " + s);
+        }
+    }
+
+    public static void WriteToDailyTransactionsFile(AvailableTicket t, String code) {
+        PrintWriter writer;
+        try {
+            writer = new PrintWriter("Daily Transactions File.txt", "UTF-8");
+            String transaction = code;
+            transaction += " ";
+            transaction += padRight(t.GetEventName(), 19);
+            transaction += " ";
+            transaction += padRight(t.GetSellerUsername(), 13);
+            transaction += " ";
+            transaction += padRight("" + t.GetNumberTickets(), 3);
+            transaction += " ";
+            transaction += padRight("" + (int) t.GetTicketPrice(), 6);
+            writer.println(transaction);
+            writer.close();
+        } catch (FileNotFoundException | UnsupportedEncodingException ex) {
+            Logger.getLogger(SellManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

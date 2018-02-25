@@ -132,14 +132,14 @@ public class Ticket_Service {
                     break;
                 case "sell":
                     if (currentAccount != null) {
-                        sellManager.Sell();
+                        sellManager.Sell(availableTicketsList, currentAccount);
                     } else {
                         System.out.println("You must be logged in to use the sell command.");
                     }
                     break;
                 case "buy":
                     if (currentAccount != null) {
-                        buyManager.Buy(availableTicketsList);
+                        buyManager.Buy(availableTicketsList, currentAccount);
                     } else {
                         System.out.println("You must be logged in to use the buy command.");
                     }

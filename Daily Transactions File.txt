@@ -1,3 +1,1 @@
-administrator   AA 012345.00 password
-END                         
-UUUUUUUUUUUUUUU_TT_CCCCCCCCC_PPPPPPPP
+03 test                administrator 12  400   
