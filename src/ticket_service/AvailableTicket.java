@@ -11,6 +11,7 @@ public class AvailableTicket {
     private int numberTickets;
     private double ticketPrice;
 
+    // Create a ticket given inputs manually.
     public AvailableTicket(String event, String seller, int num, double price) {
         this.eventName = event;
         this.sellerUsername = seller;
@@ -18,6 +19,7 @@ public class AvailableTicket {
         this.ticketPrice = price;
     }
 
+    // Create a ticket given line from file.
     public AvailableTicket(String userAccountsFileLine) {
         if (userAccountsFileLine.length() == 45) {
             eventName = userAccountsFileLine.substring(0, 19);
@@ -27,22 +29,27 @@ public class AvailableTicket {
         }
     }
 
+    // Return name of the event for this ticket.
     public String GetEventName() {
         return eventName;
     }
 
+    // Return username of the seller of this ticket.
     public String GetSellerUsername() {
         return sellerUsername;
     }
 
+    // Return the number of tickets available.
     public int GetNumberTickets() {
         return numberTickets;
     }
 
+    // Return the price per ticket.
     public double GetTicketPrice() {
         return ticketPrice;
     }
 
+    // Format a string for output of this ticket.
     @Override
     public String toString() {
         return "\n      sellerUsername: " + sellerUsername

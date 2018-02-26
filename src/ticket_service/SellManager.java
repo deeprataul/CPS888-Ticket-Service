@@ -34,6 +34,7 @@ public class SellManager {
         availableTicketsList = new ArrayList();
     }
 
+    // Initialize variables and create dialogue for user to complete.
     public void Sell(ArrayList<AvailableTicket> availableTickets, Account currentAccount) {
         input = "Not Return";
         gotEventTitle = false;
@@ -47,6 +48,8 @@ public class SellManager {
         CreateDialogue();
     }
 
+    // Ask for user input in a specific order, allowing user to enter inputs
+    // again if mistake is made or return back to main loop at any time.
     private void CreateDialogue() {
         if (myAccount.getType() != UserType.BuyStandard) {
             Output(true, "Enter return at any time to cancel operation.");
@@ -75,6 +78,7 @@ public class SellManager {
         Output(true, "Exiting...");
     }
 
+    // Get input fro event title to sell and check if valid.
     private boolean ParseEventTitle() {
         Output(false, "Enter the title of the event you'd like to sell: ");
         input = scanner.nextLine();
@@ -85,6 +89,7 @@ public class SellManager {
         return true;
     }
 
+    // Get input for number of tickets to sell and check if valid.
     private boolean ParseNumTickets() {
         Output(false, "Enter the number of tickets you want to sell: ");
         input = scanner.nextLine().toLowerCase();
@@ -95,6 +100,7 @@ public class SellManager {
         return true;
     }
 
+    // Get input for sale price and check if valid.
     private boolean ParseSalePrice() {
         Output(false, "Enter a price you'd like to sell each ticket for: ");
         input = scanner.nextLine();
@@ -105,6 +111,7 @@ public class SellManager {
         return true;
     }
 
+    // Ask user for confirmation before putting in sell order.
     private boolean Confirm() {
         Output(true, "You are selling " + numTickets + " tickets"
                 + " to the event '" + eventTitle + "'"
@@ -131,6 +138,7 @@ public class SellManager {
         return true;
     }
 
+    // Formats the output for visibility.
     private void Output(boolean newLine, String s) {
         if (newLine) {
             System.out.println("SELL MANAGER | " + s);
@@ -139,6 +147,7 @@ public class SellManager {
         }
     }
 
+    // Writes to available tickets file.
     public static void WriteToAvailableTicketsFile(ArrayList<AvailableTicket> availableTicketsList) {
         PrintWriter writer;
         try {

@@ -1,8 +1,6 @@
 package ticket_service;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
@@ -35,6 +33,7 @@ public class BuyManager {
         df = new DecimalFormat("####0.00");
     }
 
+    // Initialize variables and create dialogue for user to complete.
     public void Buy(ArrayList<AvailableTicket> list, Account currentAccount) {
         input = "Not Return";
         gotEventTitle = false;
@@ -48,6 +47,8 @@ public class BuyManager {
         CreateDialogue();
     }
 
+    // Ask for user input in a specific order, allowing user to enter inputs
+    // again if mistake is made or return back to main loop at any time.
     private void CreateDialogue() {
         if (myAccount.getType() != UserType.SellStandard) {
             Output(true, "Enter return at any time to cancel operation.");
@@ -76,6 +77,7 @@ public class BuyManager {
         Output(true, "Exiting...");
     }
 
+    // Get input for seller username to buy from and check if valid.
     private boolean ParseSellerUsername() {
         Output(false, "Enter a seller's username to check their inventory: ");
         input = scanner.nextLine();
@@ -98,6 +100,7 @@ public class BuyManager {
         }
     }
 
+    // Get input for event title to buy and check if valid.
     private boolean ParseEventTitle() {
         Output(false, "Enter the title of the event you'd like: ");
         input = scanner.nextLine();
@@ -116,6 +119,7 @@ public class BuyManager {
         return false;
     }
 
+    // Get input for number of tickets to buy and check if valid.
     private boolean ParseNumTickets() {
         Output(false, "Enter the number of tickets you want to purchase: ");
         input = scanner.nextLine().toLowerCase();
@@ -137,6 +141,7 @@ public class BuyManager {
         }
     }
 
+    // Ask user for confirmation before putting in buy order.
     private boolean Confirm() {
         totalCost = selectedTicket.GetTicketPrice() * numberToPurchase;
 
@@ -156,6 +161,7 @@ public class BuyManager {
         return true;
     }
 
+    // Formats the output for visibility.
     private void Output(boolean newLine, String s) {
         if (newLine) {
             System.out.println("BUY MANAGER | " + s);
@@ -164,6 +170,7 @@ public class BuyManager {
         }
     }
 
+    // Writes to daily transactions file.
     public static void WriteToDailyTransactionsFile(AvailableTicket t, String code) {
         PrintWriter writer;
         try {
