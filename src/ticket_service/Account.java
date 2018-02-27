@@ -104,8 +104,7 @@ public class Account {
     @Override
     //A string representation of the account
     public String toString() {
-        return "Username: " + username + "\nPassword: " + password + "\nType: " + type + "\nAvailable Credit: " + credit;
+        return "Username: " + username + "\nPassword: " + password + "\nType: " + type + 
+                "\nAvailable Credit: " + credit;
     }
-    
-    
 }
