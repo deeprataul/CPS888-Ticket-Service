@@ -127,7 +127,7 @@ public class Ticket_Service {
                     break;
                 case "logout":
                     //If there is an account currently logged in, log them out
-                    //If not display a prompt
+                    //If not display a prompt saying you must be logged in to logout
                     if (currentAccount != null) {
                         System.out.println(currentAccount.getUsername()
                                 + "successfully logged out.");

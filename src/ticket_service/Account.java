@@ -37,6 +37,8 @@ public class Account {
     }
 
     //Return the account's password
+    //May replace this with a validation function that will just return a boolean if the login
+    //is correct. Safer than returning the password string itself
     public String getPassword() {
         return password;
     }
