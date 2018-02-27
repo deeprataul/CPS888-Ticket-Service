@@ -23,24 +23,30 @@ public class Ticket_Service {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        ArrayList<Account> accountsList = new ArrayList<>();
-        Hashtable<String, Integer> accountsHash = new Hashtable<String, Integer>();
+        //An arraylist for the list of accounts
+        //ArrayList<Account> accountsList = new ArrayList<>();
+        
+        //A hashtable that stores the username and the Account itself
+        Hashtable<String, Account> accountsHash = new Hashtable<String, Account>();
         
         ArrayList<AvailableTicket> availableTicketsList = new ArrayList<>();
         BuyManager buyManager = new BuyManager();
         SellManager sellManager = new SellManager();
         
+        //currentAccount is the account of the current user or null if there is no user logged in
         Account currentAccount = null;
         System.out.println("Ticket Selling System\n"
                 + "These are the valid input commands that you can enter. At any point, enter help "
                 + "to see this list again (commands are not case sensitive).\n\n" + helpString + "\n");
 
+        //Read in the accounts from the Current User Accounts file and store each in
+        //the accountsHash hash table
         try (BufferedReader br = new BufferedReader(new FileReader("Current User Accounts.txt"))) {
             String line = br.readLine();
             if (!line.equals("END                         ")) {
                 Account newAccount = new Account(line);
-                accountsList.add(newAccount);
-                accountsHash.put(newAccount.username, accountsList.size() - 1);
+                //accountsList.add(newAccount);
+                accountsHash.put(newAccount.getUsername(), newAccount);
             } else {
                 br.close();
             }
@@ -48,6 +54,8 @@ public class Ticket_Service {
             System.err.println(ex.getMessage());
         }
 
+        //Read in the available tickets from the "Available Tickets File" file and store each in
+        //the accountsHash hash table
         try (BufferedReader br = new BufferedReader(new FileReader("Available Tickets File.txt"))) {
             String line = br.readLine();
             if (!line.equals("END")) {
@@ -60,6 +68,7 @@ public class Ticket_Service {
             System.err.println(ex.getMessage());
         }
         
+        //Read in input from the user and handle it accordingly
         Scanner scanner = new Scanner(System.in);
         String input = "Not Exit";
         while (!input.equals("exit")) {
@@ -68,21 +77,30 @@ public class Ticket_Service {
 
             switch (input) {
                 case "login":
+                    //If there is no account currently logged in, continue, else display a prompt
                     if (currentAccount == null) {
                         boolean attemptingLogin = true;
 
+                        //Continue to allow the user to attempt to login while they still want to
                         while (attemptingLogin) {
+                            //Read in username and password
                             System.out.print("Enter your username: ");
                             input = scanner.nextLine();
                             System.out.print("Enter your password: ");
                             String password = scanner.nextLine();
 
+                            //Check if the username exists and if it does, check if the password
+                            //is correct for that user. If yes, log them in
                             if (accountsHash.containsKey(input)
-                                    && accountsList.get(accountsHash.get(input)).getPassword().equals(password)) {
-                                currentAccount = accountsList.get(accountsHash.get(input));
+                                    && accountsHash.get(input).getPassword().equals(password)){
+                                    //&& accountsList.get(accountsHash.get(input)).getPassword().equals(password)) {
+                                currentAccount = accountsHash.get(input);//accountsList.get(accountsHash.get(input));
                                 attemptingLogin = false;
                                 System.out.println("Welcome " + currentAccount.getUsername());
                             } else {
+                                //Invalid username or password. Ask them if the want to try again
+                                //If y then let them try again. If n then go back to the main menu
+                                //Loop until you get either y or n
                                 boolean validInput = false;
                                 while (!validInput) {
                                     System.out.print("Invalid user credentials. Would you like to " +
@@ -108,6 +126,8 @@ public class Ticket_Service {
                     }
                     break;
                 case "logout":
+                    //If there is an account currently logged in, log them out
+                    //If not display a prompt
                     if (currentAccount != null) {
                         System.out.println(currentAccount.getUsername()
                                 + "successfully logged out.");
@@ -159,11 +179,14 @@ public class Ticket_Service {
                     }
                     break;
                 case "help":
+                    //Display the helpString
                     System.out.println(helpString + "\n");
                     break;
                 case "exit":
+                    //Display a prompt and exit
                     System.out.println("Good bye");
                 default:
+                    //Display a prompt letting them know invalid input was entered
                     System.out.println("Sorry. You have not entered a valid input. Please try "
                             + "again. If you would like to see the list of commands, enter " +
                             "\"help\" (without quotations)\n");
