@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Scanner;
+import ticket_service.Account.UserType;
+
 
 /**
  *
@@ -32,6 +34,7 @@ public class Ticket_Service {
         ArrayList<AvailableTicket> availableTicketsList = new ArrayList<>();
         BuyManager buyManager = new BuyManager();
         SellManager sellManager = new SellManager();
+        
         
         //currentAccount is the account of the current user or null if there is no user logged in
         Account currentAccount = null;
@@ -68,6 +71,7 @@ public class Ticket_Service {
             System.err.println(ex.getMessage());
         }
         
+		
         //Read in input from the user and handle it accordingly
         Scanner scanner = new Scanner(System.in);
         String input = "Not Exit";
@@ -166,13 +170,40 @@ public class Ticket_Service {
                     break;
                 case "refund":
                     if (currentAccount != null) {
-                        //Write the refund code here
+                        if(currentAccount.getType()== UserType.SellStandard){
+                            System.out.println("Type the username of the user you wish to refund money to:  ");
+                            String input3 = scanner.nextLine();
+                            System.out.println("Enter the amount you wish to add:  ");
+                            float input2 = scanner.nextInt();
+                            if(currentAccount.getCredit() > input2){
+                            accountsHash.get(input3).setCredit(accountsHash.get(input3).getCredit() + input2);
+                            currentAccount.setCredit(currentAccount.getCredit() - input2);
+                            }else{System.out.println("Not enough funds to refund");}
+                        }else{
+                            System.out.println("You must be a SellStandard account to be able to refund");
+                        }
+						
                     } else {
                         System.out.println("You must be logged in to use the refund command.");
                     }
                     break;
                 case "addcredit":
                     if (currentAccount != null) {
+                        
+                        if(currentAccount.getType()== UserType.Admin){
+						System.out.println("Type the username of the user you wish to add money to:  ");
+						input = scanner.nextLine();
+                                                //float input1 = accountsHash.get(input).getCredit();
+						System.out.println("Enter the amount you wish to add:  ");
+						float input5 = scanner.nextInt();
+                                                if(accountsHash.get(input).getCredit() < 999998){
+                                                accountsHash.get(input).setCredit(accountsHash.get(input).getCredit()+ input5);
+                                                }
+						
+						} else {
+						System.out.println("You must be an admin to be able to add credit");
+						}
+						
                         //Write the addcredit code here
                     } else {
                         System.out.println("You must be logged in to use the addcredit command.");
